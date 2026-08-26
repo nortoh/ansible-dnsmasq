@@ -43,14 +43,14 @@ No `.ansible-lint` or `.yamllint` config exists in this repo, so there's no loca
 to run. The only test/CI definition is `.travis.yml`, and it depends on functional test code kept
 in a separate `tests` git branch (see `.gitignore`, which excludes `tests/` from `master`).
 
-This fork's own `origin` remote has no `tests` branch — only the upstream
-[bertvv/ansible-dnsmasq](https://github.com/bertvv/ansible-dnsmasq) does. Fetch it from upstream,
-not `origin`:
+This repo's `origin` does have a `tests` branch (confirmed via `git ls-remote`) — fetch it
+from `origin`, not from the upstream [bertvv/ansible-dnsmasq](https://github.com/bertvv/ansible-dnsmasq),
+which carries its own divergent `tests` branch and would exercise upstream's playbook
+instead of this fork's:
 
 ```bash
-git remote add upstream https://github.com/bertvv/ansible-dnsmasq.git   # once
-git fetch upstream tests
-git worktree add tests upstream/tests    # requires git >= 2.5.0
+git fetch origin tests
+git worktree add tests origin/tests      # requires git >= 2.5.0
 cd tests
 vagrant up                               # builds the test VMs and applies test.yml
 ./runtests.sh                            # BATS functional tests; installs BATS on first run
